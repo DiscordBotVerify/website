@@ -1,151 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Security Bot Registration</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #36393F;
-            color: white;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .form-container {
-            background: #2f3136;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            width: 400px;
-        }
-        h1 {
-            text-align: center;
-            color: #7289da;
-        }
-        .input-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #72767d;
-            border-radius: 4px;
-            background: #40444b;
-            color: white;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #7289da;
-        }
-        .input-field::placeholder {
-            color: #99aab5;
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            background-color: #7289da;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .submit-btn:hover {
-            background-color: #5b6e8f;
-        }
-        .footer-text {
-            text-align: center;
-            color: #99aab5;
-            margin-top: 15px;
-        }
-        .footer-text a {
-            color: #7289da;
-            text-decoration: none;
-        }
-        .footer-text a:hover {
-            text-decoration: underline;
-        }
-        .captcha {
-            background: #40444b;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Security Bot Registration</title>
+  <style>
+    /* Body Styling */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column; /* Stack the form and footer vertically */
+      background: linear-gradient(45deg, #ff4c4c, #ff8e00);
+      background-size: 400% 400%;
+      animation: gradientAnimation 10s ease infinite;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* Background Gradient Animation */
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Container Styling */
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Header Styling */
+    h1 {
+      text-align: center;
+      color: #ff4c4c;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    /* Form Styling */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="email"], input[type="password"], select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      background-color: #333;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    /* Submit Button Styling */
+    input[type="submit"] {
+      padding: 12px;
+      border: none;
+      background-color: #ff4c4c;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #e43e3e;
+    }
+
+    /* Error Message Styling */
+    .error {
+      color: #ff4c4c;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      input[type="submit"] {
+        font-size: 1rem;
+      }
+    }
+
+    /* Footer Styling */
+    footer {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="form-container">
-        <h1>Register with Discord Security Bot</h1>
-        <form id="registration-form" action="#" method="post" onsubmit="return validateForm()">
-            <!-- Username -->
-            <input class="input-field" type="text" name="username" placeholder="Enter Username" required>
+  <div class="container">
+    <h1>Discord Security Bot Registration</h1>
+    <form id="registrationForm">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required>
 
-            <!-- Email or Phone -->
-            <input class="input-field" id="emailOrPhone" type="text" name="emailOrPhone" placeholder="Enter Email or Phone Number" required>
+      <label for="email">Email or Phone Number</label>
+      <input type="email" id="email" name="email" required placeholder="e.g., user@gmail.com">
 
-            <!-- Password -->
-            <input class="input-field" type="password" name="password" placeholder="Enter Password" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
 
-            <!-- Confirm Password -->
-            <input class="input-field" type="password" name="confirm_password" placeholder="Confirm Password" required>
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required>
 
-            <!-- CAPTCHA -->
-            <div class="captcha">
-                <label for="captcha">Captcha: 5 + 3 = ?</label><br>
-                <input class="input-field" type="text" name="captcha" placeholder="Enter the answer" required>
-            </div>
+      <label for="country">Country</label>
+      <select id="country" name="country" required>
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+        <option value="GB">United Kingdom</option>
+        <!-- Add more countries as needed -->
+      </select>
 
-            <!-- Submit Button -->
-            <button class="submit-btn" type="submit">Register</button>
-        </form>
+      <input type="submit" value="Register">
 
-        <div class="footer-text">
-            <p>Already have an account? <a href="#">Login here</a></p>
-        </div>
-        <div id="error-message" class="error"></div>
-    </div>
-</div>
+      <p class="error" id="errorMessage"></p>
+    </form>
+  </div>
 
-<script>
-    function validateForm() {
-        var emailOrPhone = document.getElementById("emailOrPhone").value;
-        var errorMessage = document.getElementById("error-message");
-        var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.(com|org|net|co|io)$/; // email regex
-        var phoneRegex = /^[\+]?[0-9]{10,15}$/; // basic phone number regex
+  <!-- Footer Text -->
+  <footer>
+    <p>© 2025 Soy, All rights reserved.</p>
+  </footer>
 
-        // Check if input is an email or phone number
-        if (emailOrPhone.match(emailRegex)) {
-            // Check if email domain is allowed
-            var allowedDomains = ['gmail.com', 'yahoo.com'];
-            var domain = emailOrPhone.split('@')[1];
-            if (!allowedDomains.includes(domain)) {
-                errorMessage.textContent = "Only Gmail or Yahoo email addresses are allowed.";
-                return false;
-            }
-        } else if (!emailOrPhone.match(phoneRegex)) {
-            errorMessage.textContent = "Please enter a valid email address or phone number.";
-            return false;
-        } else {
-            errorMessage.textContent = ""; // Clear error message if valid
-        }
+  <script>
+    // Form Validation
+    const form = document.getElementById('registrationForm');
+    const errorMessage = document.getElementById('errorMessage');
 
-        return true; // Continue with form submission
-    }
-</script>
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Clear previous error messages
+      errorMessage.textContent = '';
+
+      // Simple email validation to check only major domains (gmail, yahoo)
+      const validEmailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/;
+      if (!validEmailPattern.test(email)) {
+        errorMessage.textContent = 'Please enter a valid email (Gmail or Yahoo only).';
+        return;
+      }
+
+      // Check if passwords match
+      if (password !== confirmPassword) {
+        errorMessage.textContent = 'Passwords do not match.';
+        return;
+      }
+
+      // Success message
+      errorMessage.textContent = 'Registration successful!';
+      errorMessage.style.color = 'green';
+    });
+  </script>
 
 </body>
 </html>
