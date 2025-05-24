@@ -14,7 +14,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column; /* Stack the form and footer vertically */
+      flex-direction: column;
       background: linear-gradient(45deg, #6a11cb, #2575fc); /* Blue-Purple Gradient */
       background-size: 400% 400%;
       animation: gradientAnimation 10s ease infinite;
@@ -24,71 +24,79 @@
 
     /* Background Gradient Animation */
     @keyframes gradientAnimation {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* Container Styling */
     .container {
       width: 100%;
-      max-width: 600px;
+      max-width: 450px;
       background-color: rgba(0, 0, 0, 0.7);
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      text-align: center;
     }
 
     /* Header Styling */
     h1 {
-      text-align: center;
-      color: #ff4c4c;
       font-size: 2.5rem;
-      margin-bottom: 20px;
+      color: #ffffff;
+      margin-bottom: 30px;
     }
 
     /* Form Styling */
     form {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 20px;
     }
 
     label {
       font-size: 1.1rem;
-      margin-bottom: 5px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #fff;
     }
 
     input[type="email"], input[type="password"], input[type="text"], select {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #555;
-      border-radius: 8px;
-      background-color: #333;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      background-color: #222;
       color: #fff;
       font-size: 1rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    /* Input Focus Effect */
+    input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus {
+      border: 1px solid #6a11cb;
+      background-color: #333;
+      box-shadow: 0 0 8px rgba(106, 17, 203, 0.7);
     }
 
     /* Submit Button Styling */
     input[type="submit"] {
-      padding: 12px;
+      padding: 15px;
+      border-radius: 12px;
       border: none;
-      background-color: #ff4c4c;
+      background-color: #6a11cb;
       color: white;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       cursor: pointer;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     input[type="submit"]:hover {
-      background-color: #e43e3e;
+      background-color: #2575fc;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     }
 
     /* Error Message Styling */
@@ -109,21 +117,30 @@
       font-style: italic;
     }
 
+    /* Neumorphism Effect on CAPTCHA */
+    #captchaBox {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      border-radius: 12px;
+      background: #333;
+      box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2), -8px -8px 15px rgba(255, 255, 255, 0.1);
+    }
+
     /* Media Queries for Responsiveness */
     @media (max-width: 600px) {
       h1 {
         font-size: 2rem;
       }
-
       .container {
-        padding: 20px;
+        padding: 25px;
+        width: 90%;
       }
-
       input[type="submit"] {
         font-size: 1rem;
       }
     }
-
   </style>
 </head>
 <body>
@@ -146,7 +163,7 @@
 
       <!-- Custom CAPTCHA -->
       <label for="captcha">Enter the number you see:</label>
-      <div id="captchaBox" style="display: flex; align-items: center; justify-content: space-between;">
+      <div id="captchaBox">
         <span id="captchaText" style="font-size: 1.5rem; font-weight: bold;">12345</span>
         <input type="text" id="captcha" name="captcha" required placeholder="Enter CAPTCHA">
       </div>
@@ -192,10 +209,10 @@
       // Clear previous error messages
       errorMessage.textContent = '';
 
-      // Simple email validation to check only major domains (gmail, yahoo)
-      const validEmailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$/;
+      // Simple email validation to check multiple domains
+      const validEmailPattern = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|protonmail\.com|outlook\.com|hotmail\.com)$/;
       if (!validEmailPattern.test(email)) {
-        errorMessage.textContent = 'Please enter a valid email (Gmail or Yahoo only).';
+        errorMessage.textContent = 'Please enter a valid email (Gmail, Yahoo, ProtonMail, Outlook, or Hotmail only).';
         return;
       }
 
